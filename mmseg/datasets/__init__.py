@@ -20,6 +20,7 @@ from .lip import LIPDataset
 from .loveda import LoveDADataset
 from .mapillary import MapillaryDataset_v1, MapillaryDataset_v2
 from .night_driving import NightDrivingDataset
+from .nyu import NYUDataset
 from .pascal_context import PascalContextDataset, PascalContextDataset59
 from .potsdam import PotsdamDataset
 from .refuge import REFUGEDataset
@@ -61,4 +62,5 @@ __all__ = [
     'LoadMultipleRSImageFromFile', 'LoadSingleRSImageFromFile',
     'ConcatCDInput', 'BaseCDDataset', 'DSDLSegDataset', 'BDD100KDataset',
     'HeadCTDataset',
+    'NYUDataset'
 ]
