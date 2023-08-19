@@ -2,7 +2,9 @@
 from argparse import ArgumentParser
 
 from mmengine.model import revert_sync_batchnorm
-
+import sys
+import pdb
+sys.path.insert(0, '/home/ubuntu/mmsegmentation')
 from mmseg.apis import inference_model, init_model, show_result_pyplot
 
 
@@ -30,15 +32,17 @@ def main():
     # test a single image
     result = inference_model(model, args.img)
     # show the results
-    show_result_pyplot(
+    vis_image = show_result_pyplot(
         model,
         args.img,
         result,
         title=args.title,
         opacity=args.opacity,
         draw_gt=False,
+        save_dir='/tmp',
         show=False if args.out_file is not None else True,
         out_file=args.out_file)
+    print(vis_image.shape)
 
 
 if __name__ == '__main__':
