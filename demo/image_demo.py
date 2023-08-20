@@ -2,11 +2,12 @@
 from argparse import ArgumentParser
 
 from mmengine.model import revert_sync_batchnorm
+from mmengine.structures import PixelData
 import sys
 import pdb
 sys.path.insert(0, '/home/ubuntu/mmsegmentation')
 from mmseg.apis import inference_model, init_model, show_result_pyplot
-
+import torch
 
 def main():
     parser = ArgumentParser()
@@ -31,6 +32,9 @@ def main():
         model = revert_sync_batchnorm(model)
     # test a single image
     result = inference_model(model, args.img)
+    # Dummy empty GT mask.
+    gt_mask = torch.zeros(512, 512)
+    result.gt_sem_seg = PixelData(data=gt_mask)
     # show the results
     vis_image = show_result_pyplot(
         model,
@@ -38,8 +42,7 @@ def main():
         result,
         title=args.title,
         opacity=args.opacity,
-        draw_gt=False,
-        save_dir='/tmp',
+        draw_gt=True,
         show=False if args.out_file is not None else True,
         out_file=args.out_file)
     print(vis_image.shape)
