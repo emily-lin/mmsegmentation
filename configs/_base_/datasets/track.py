@@ -1,11 +1,11 @@
 # dataset settings
 dataset_type = 'HeadCTDataset'
 data_root = 'data/track'
-reduce_zero_label = False # TODO(weicheng) Verify we should set this to False/True.
+reduce_zero_label = False # Must set to False (True will break evaluation on existing checkpoint).
 crop_size = (512, 512)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='LoadAnnotations', reduce_zero_label=True),
+    dict(type='LoadAnnotations', reduce_zero_label=reduce_zero_label),
     dict(
         type='RandomResize',
         scale=(2048, 512),
