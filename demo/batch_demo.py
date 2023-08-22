@@ -36,8 +36,8 @@ def get_image_label_paths(data_dir, cutoff=None):
   test_images = [x for x in os.listdir(test_dir) if x.endswith('.png')]
   test_images = sorted(test_images)
   gt_labels = [x.replace('_Im', '_Gt') for x in test_images]
-  test_image_paths = [os.path.join(data_dir, 'images', 'test', x) for x in test_images]
-  gt_labels_paths = [os.path.join(data_dir, 'gt_labels', 'test', x) for x in gt_labels]
+  test_image_paths = [os.path.join(data_dir, 'images', 'validation', x) for x in test_images]
+  gt_labels_paths = [os.path.join(data_dir, 'annotations', 'validation', x) for x in gt_labels]
   if cutoff:
     test_image_paths = test_image_paths[:cutoff]
     gt_labels_paths = gt_labels_paths[:cutoff]
