@@ -63,4 +63,5 @@ __all__ = [
     'ConcatCDInput', 'BaseCDDataset', 'DSDLSegDataset', 'BDD100KDataset',
     'HeadCTDataset',
     'NYUDataset'
+    'HeadCTDataset',
 ]
