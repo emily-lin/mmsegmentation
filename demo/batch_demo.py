@@ -32,7 +32,7 @@ def parse_args():
 
 
 def get_image_label_paths(data_dir, cutoff=None):
-  test_dir = os.path.join(data_dir, 'images', 'test')
+  test_dir = os.path.join(data_dir, 'images', 'validation')
   test_images = [x for x in os.listdir(test_dir) if x.endswith('.png')]
   test_images = sorted(test_images)
   gt_labels = [x.replace('_Im', '_Gt') for x in test_images]
