@@ -36,7 +36,7 @@ tta_pipeline = [
             ],
             [
                 dict(type='RandomFlip', prob=0., direction='horizontal'),
-                dict(type='RandomFlip', prob=1., direction='horizontal')
+                dict(type='RandomFlip', prob=1., direction='horizontal'),
             ], [dict(type='LoadAnnotations')], [dict(type='PackSegInputs')]
         ])
 ]

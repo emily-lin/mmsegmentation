@@ -4,7 +4,13 @@ _base_ = [
 ]
 crop_size = (512, 512)
 num_classes = 7
-data_preprocessor = dict(size=crop_size)
+data_preprocessor = dict(
+      type='SegDataPreProcessor',
+      size=crop_size,
+      mean=[124.95, 124.95, 124.95],
+      std=[24.735, 24.735, 24.735],
+      bgr_to_rgb=True, # Set this because the pretrained checkpoint set to_rgb=True.
+)
 checkpoint_file = 'https://download.openmmlab.com/mmsegmentation/v0.5/pretrain/swin/swin_tiny_patch4_window7_224_20220317-1cdeb081.pth'  # noqa
 model = dict(
     data_preprocessor=data_preprocessor,
