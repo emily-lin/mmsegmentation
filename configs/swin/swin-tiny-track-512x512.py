@@ -2,6 +2,10 @@ _base_ = [
     '../_base_/models/upernet_swin.py', '../_base_/datasets/track.py',
     '../_base_/default_runtime.py', '../_base_/schedules/schedule_160k.py'
 ]
+vis_interval = 1 # Visualize every image.
+vis_backends = [dict(type='LocalVisBackend')]
+visualizer = dict(
+    type='HeadCTVisualizer', vis_backends=vis_backends, name='visualizer')
 crop_size = (512, 512)
 num_classes = 7
 data_preprocessor = dict(
@@ -52,6 +56,14 @@ param_scheduler = [
         by_epoch=False,
     )
 ]
+
+default_hooks = dict(
+    timer=dict(type='IterTimerHook'),
+    logger=dict(type='LoggerHook', interval=50, log_metric_by_epoch=False),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    checkpoint=dict(type='CheckpointHook', by_epoch=False, interval=16000),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    visualization=dict(type='SegVisualizationHook', interval=vis_interval))
 
 # By default, models are trained on 8 GPUs with 2 images per GPU
 train_dataloader = dict(batch_size=2)

@@ -70,7 +70,7 @@ class SegLocalVisualizer(Visualizer):
                  classes: Optional[List] = None,
                  palette: Optional[List] = None,
                  dataset_name: Optional[str] = None,
-                 alpha: float = 0.8,
+                 alpha: float = 0.5,
                  **kwargs):
         super().__init__(name, image, vis_backends, save_dir, **kwargs)
         self.alpha: float = alpha
@@ -229,3 +229,51 @@ class SegLocalVisualizer(Visualizer):
             mmcv.imwrite(mmcv.rgb2bgr(drawn_img), out_file)
         else:
             self.add_image(name, drawn_img, step)
+
+
+@VISUALIZERS.register_module()
+class HeadCTVisualizer(SegLocalVisualizer):
+    """Head CT visualizer."""
+
+    def _draw_sem_seg(self, image: np.ndarray, sem_seg: PixelData,
+                      classes: Optional[List],
+                      palette: Optional[List]) -> np.ndarray:
+        """Draw semantic seg of GT or prediction.
+
+        Args:
+            image (np.ndarray): The image to draw.
+            sem_seg (:obj:`PixelData`): Data structure for pixel-level
+                annotations or predictions.
+            classes (list, optional): Input classes for result rendering, as
+                the prediction of segmentation model is a segment map with
+                label indices, `classes` is a list which includes items
+                responding to the label indices. If classes is not defined,
+                visualizer will take `cityscapes` classes by default.
+                Defaults to None.
+            palette (list, optional): Input palette for result rendering, which
+                is a list of color palette responding to the classes.
+                Defaults to None.
+
+        Returns:
+            np.ndarray: the drawn image which channel is RGB.
+        """
+        num_classes = len(classes)
+        assert image.shape[2] == 3, "Image must have 3 channels for HEAD CT visualizer."
+        image = np.tile(image[:, :, 1:2], (1, 1, 3)) # Take center channel.
+
+        sem_seg = sem_seg.cpu().data
+        ids = np.unique(sem_seg)[::-1]
+        legal_indices = ids < num_classes
+        ids = ids[legal_indices]
+        labels = np.array(ids, dtype=np.int64)
+
+        colors = [palette[label] for label in labels]
+
+        mask = np.zeros_like(image, dtype=np.uint8)
+        for label, color in zip(labels, colors):
+            mask[sem_seg[0] == label, :] = color
+
+        color_seg = (image * (1 - self.alpha) + mask * self.alpha).astype(
+            np.uint8)
+        self.set_image(color_seg)
+        return color_seg

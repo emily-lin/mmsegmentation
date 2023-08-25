@@ -11,6 +11,7 @@ from mmengine.runner import Runner
 from mmseg.registry import HOOKS
 from mmseg.structures import SegDataSample
 from mmseg.visualization import SegLocalVisualizer
+from mmseg.visualization import HeadCTVisualizer
 
 
 @HOOKS.register_module()
@@ -42,8 +43,8 @@ class SegVisualizationHook(Hook):
                  show: bool = False,
                  wait_time: float = 0.,
                  backend_args: Optional[dict] = None):
-        self._visualizer: SegLocalVisualizer = \
-            SegLocalVisualizer.get_current_instance()
+        # TODO(weicheng) support Seglocalvisualizer as well. 
+        self._visualizer: HeadCTVisualizer = HeadCTVisualizer.get_current_instance()
         self.interval = interval
         self.show = show
         if self.show:
@@ -88,6 +89,8 @@ class SegVisualizationHook(Hook):
                     img_path, backend_args=self.backend_args)
                 img = mmcv.imfrombytes(img_bytes, channel_order='rgb')
                 window_name = f'{mode}_{osp.basename(img_path)}'
+                save_dir = self._visualizer._vis_backends['LocalVisBackend']._save_dir
+                out_file = osp.join(save_dir, window_name.replace('.png', '.jpg'))
 
                 self._visualizer.add_datasample(
                     window_name,
@@ -95,4 +98,5 @@ class SegVisualizationHook(Hook):
                     data_sample=output,
                     show=self.show,
                     wait_time=self.wait_time,
+                    out_file=out_file,
                     step=runner.iter)
