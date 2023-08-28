@@ -69,3 +69,7 @@ default_hooks = dict(
 train_dataloader = dict(batch_size=2)
 val_dataloader = dict(batch_size=1)
 test_dataloader = val_dataloader
+
+# Set evaluator.
+val_evaluator = dict(type='IoUROCMetric', iou_metrics=['mDice', 'mIoU'])
+test_evaluator = val_evaluator

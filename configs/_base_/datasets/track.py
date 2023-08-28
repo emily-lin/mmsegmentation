@@ -3,6 +3,14 @@ dataset_type = 'HeadCTDataset'
 data_root = 'data/track'
 reduce_zero_label = False # Must set to False (True will break evaluation on existing checkpoint).
 crop_size = (512, 512)
+img_path = 'images/validation'
+seg_map_path = 'annotations/validation'
+
+# Debug only
+#-----------------------
+# img_path = 'images/training'
+# seg_map_path = 'annotations/training'
+#-----------------------
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', reduce_zero_label=reduce_zero_label),
@@ -60,8 +68,8 @@ val_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         data_prefix=dict(
-            img_path='images/validation',
-            seg_map_path='annotations/validation'),
+            img_path=img_path,
+            seg_map_path=seg_map_path),
         pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
