@@ -1,4 +1,4 @@
-python tools/test.py configs/swin/swin-tiny-track-512x512.py ./work_dirs/20231114_swin_baseline_run/iter_20000.pth  
+python tools/test.py configs/swin/20231118_gotham_track.py ./work_dirs/20231118_gotham_track/iter_20000.pth  
 
 # Command to save visualization.
 #VIS_DIR=/tmp/vis_dir

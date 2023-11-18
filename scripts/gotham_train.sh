@@ -1,4 +1,4 @@
-python tools/train.py configs/swin/swin-tiny-track-512x512.py
+python tools/train.py configs/swin/20231118_gotham_track.py
 
 # Command to save visualization.
 #VIS_DIR=/tmp/vis_dir
