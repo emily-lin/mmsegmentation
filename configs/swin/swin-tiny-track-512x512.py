@@ -1,6 +1,6 @@
 _base_ = [
-    '../_base_/models/upernet_swin.py', '../_base_/datasets/track.py',
-    '../_base_/default_runtime.py', '../_base_/schedules/schedule_160k.py'
+    '../_base_/models/upernet_swin.py', '../_base_/datasets/gotham_track.py',
+    '../_base_/default_runtime.py', '../_base_/schedules/schedule_20k.py'
 ]
 vis_interval = 1 # Visualize every image.
 vis_backends = [dict(type='LocalVisBackend')]

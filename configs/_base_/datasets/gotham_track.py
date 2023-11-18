@@ -1,6 +1,7 @@
 # dataset settings
 dataset_type = 'HeadCTDataset'
-data_root = 'data/track'
+train_data_root = 'data/gotham'
+test_data_root = 'data/track'
 reduce_zero_label = False # Must set to False (True will break evaluation on existing checkpoint).
 crop_size = (512, 512)
 img_path = 'images/validation'
@@ -55,7 +56,7 @@ train_dataloader = dict(
     sampler=dict(type='InfiniteSampler', shuffle=True),
     dataset=dict(
         type=dataset_type,
-        data_root=data_root,
+        data_root=train_data_root,
         data_prefix=dict(
             img_path='images/training', seg_map_path='annotations/training'),
         pipeline=train_pipeline))
@@ -66,7 +67,7 @@ val_dataloader = dict(
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
         type=dataset_type,
-        data_root=data_root,
+        data_root=test_data_root,
         data_prefix=dict(
             img_path=img_path,
             seg_map_path=seg_map_path),
