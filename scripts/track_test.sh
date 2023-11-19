@@ -1,4 +1,11 @@
-python tools/test.py configs/swin/20231118_gotham_track.py ./work_dirs/20231118_gotham_track/iter_20000.pth  
+#!/bin/bash
+if [ "$1" = "" ]
+then
+  echo "Usage: $0 <path to load the checkpoint.>"
+  exit
+fi
+
+python tools/test.py configs/swin/20231118_gotham_track.py $1
 
 # Command to save visualization.
 #VIS_DIR=/tmp/vis_dir
