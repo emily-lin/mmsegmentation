@@ -5,7 +5,7 @@ _base_ = [
 ]
 
 vis_interval = 1 # Visualize every image.
-checkpoint_file = 'pretrain/swin_tiny_patch4_window7_224.pth'
+checkpoint_file = 'pretrain/upernet_swin_pretrain_ade20k.pth'
 warmup_steps = 1500
 total_steps = 40000
 val_interval = total_steps // 5
