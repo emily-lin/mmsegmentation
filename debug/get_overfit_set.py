@@ -7,7 +7,8 @@ import pdb
 data = '/home/ubuntu/mmsegmentation/data/'
 gotham = os.path.join(data, 'gotham/annotations/training')
 
-def get_positive_gt(data, num):
+def get_positive_gt(data):
+# def get_positive_gt(data, num):
     """
     Get all positive gt and a desired subsample from the dataset by 
     reading gt files.
@@ -30,11 +31,11 @@ def get_positive_gt(data, num):
         if len(np.unique(np_gt).tolist()) > 1:
             positive_gt.append(gt)
 
-    print('Sampling gt_files...')
-    sampled_gt = random.sample(positive_gt, num)
+    # print('Sampling gt_files...')
+    # sampled_gt = random.sample(positive_gt, num)
     
-    return positive_gt, sampled_gt
-
+    # return positive_gt, sampled_gt
+    return positive_gt
 
 def write_text_files(sampled_gt, output):
     with open(output, 'w') as file:
@@ -43,13 +44,15 @@ def write_text_files(sampled_gt, output):
     
 
 if __name__ == '__main__':
-    output = 'overfit_data/20231120_sampled_gt.txt'
+    output = 'overfit_data/20231120_pos_gotham.txt'
 
-    positive_gt, sampled_gt = get_positive_gt(data = gotham, num = 25)
+    # positive_gt, sampled_gt = get_positive_gt(data = gotham, num = 25)
+    positive_gt = get_positive_gt(data = gotham)
     print('Positive gt: {}'.format(positive_gt))
     print('Number of positive gt files: {}'.format(len(positive_gt)))
-    print('Sampled gt: {}'.format(sampled_gt))
-    print('Number of sampled gt files: {}'.format(len(sampled_gt)))
-    
-    write_text_files(sampled_gt = sampled_gt, output = output)
+    # print('Sampled gt: {}'.format(sampled_gt))
+    # print('Number of sampled gt files: {}'.format(len(sampled_gt)))
+   
+    write_text_files(sampled_gt = positive_gt, output = output)
+    # write_text_files(sampled_gt = sampled_gt, output = output)
 
