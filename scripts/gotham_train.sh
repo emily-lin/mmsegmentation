@@ -5,7 +5,7 @@ then
   exit
 fi
 
-python tools/train.py configs/swin/20231130_gotham_track_swin_small.py --work-dir="./work_dirs/$1"
+python tools/train.py configs/swin/20231130_gotham_track_swin_base.py --work-dir="./work_dirs/$1"
 
 # Command to save visualization.
 #VIS_DIR=/tmp/vis_dir
