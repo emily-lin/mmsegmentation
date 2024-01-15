@@ -84,9 +84,12 @@ def dice_loss(pred: torch.Tensor,
         d = (2 * a) / (b + c)
 
     loss = 1 - d
-    if weight is not None:
+    # if weight is not None:
+    # Ignore weight.
+    if False:
         assert weight.ndim == loss.ndim
         assert len(weight) == len(pred)
+    weight = None
     loss = weight_reduce_loss(loss, weight, reduction, avg_factor)
     return loss
 
