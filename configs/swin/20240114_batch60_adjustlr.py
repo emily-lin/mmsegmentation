@@ -9,15 +9,8 @@ model = dict(
         depths=[2, 2, 18, 2],
         num_heads=[4, 8, 16, 32]),
     decode_head=dict(in_channels=[128, 256, 512, 1024],
-        sampler = dict(type = 'OHEMPixelSampler', thresh = 0.5, min_kept = 20000),
-        loss_decode = [
-            dict(type = 'CrossEntropyLoss', loss_name = 'loss_ce', loss_weight = 3.0), 
-            dict(type = 'DiceLoss', loss_name = 'loss_dice', loss_weight = 1.0)]),
-    auxiliary_head=dict(in_channels=512,
-        loss_decode = [
-            dict(type = 'CrossEntropyLoss', loss_name = 'loss_ce', loss_weight = 3.0),
-            dict(type = 'DiceLoss', loss_name = 'loss_dice', loss_weight = 1.0)]),
-        )
+        sampler = dict(type = 'OHEMPixelSampler', thresh = 0.5, min_kept = 20000)),
+    auxiliary_head=dict(in_channels=512))
 
 # AdamW optimizer, no weight decay for position embedding & layer norm in backbone
 optim_wrapper = dict(
