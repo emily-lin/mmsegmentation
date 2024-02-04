@@ -355,14 +355,26 @@ class IoUROCMetric(IoUMetric):
         num_classes = next(iter(exam_pred_label.values()))['pred'].shape[0]
         # Exclude background ROC-AUC and set it to NaN.
         roc_classes = [np.nan]
+        # Store stack scores and labels over num_classes for binary metric
+        class_stack_scores, class_stack_labels = [], []
         for c in range(1, num_classes):
           stack_scores = np.array([v['pred'][c] for v in exam_pred_label.values()])
           stack_labels = np.array([v['label'][c] for v in exam_pred_label.values()])
           fpr, tpr, thresh = metrics.roc_curve(stack_labels, stack_scores, pos_label=1)
           roc_auc = metrics.auc(fpr,tpr)
           roc_classes.append(roc_auc)
-        ret_metrics = {'ROC-AUC': np.array(roc_classes)}
-        summary_metrics = {'ROC-AUC': np.round(np.nanmean(roc_classes) * 100, 2)}
+          class_stack_scores.append(stack_scores[np.newaxis, :])
+          class_stack_labels.append(stack_labels[np.newaxis, :])
+
+        # Binary stack labels: max along the num_classes dimension.
+        binary_stack_labels = np.amax(np.concatenate(class_stack_labels, axis=0), axis=0)
+        # Binary stack scores: max/mean along the num_classes dimension (comment one out and keep the other).
+        binary_stack_scores = np.mean(np.concatenate(class_stack_scores, axis=0), axis=0)
+        fpr, tpr, thresh = metrics.roc_curve(binary_stack_labels, binary_stack_scores, pos_label=1)
+        bin_roc_auc = metrics.auc(fpr,tpr)
+        
+        ret_metrics = {'ROC-AUC': np.array(roc_classes), 'Binary-ROC': np.array([bin_roc_auc] * num_classes)}
+        summary_metrics = {'ROC-AUC': np.round(np.nanmean(roc_classes) * 100, 2), 'Binary-ROC': np.round(bin_roc_auc * 100, 2)}
         return summary_metrics, ret_metrics
     
     def print_metrics(self, ret_metrics: Dict[str, float]):
