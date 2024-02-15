@@ -43,13 +43,15 @@ for img in progressbar.progressbar(test_imgs):
   gt = img.replace('_Im', '_Gt')
   gt_path = os.path.join(gt_dir, gt)
   gt_labels = np.array(Image.open(gt_path))
-  if not np.any(gt_labels):
+  if np.any(gt_labels):
     continue
 
   model = init_model(config_file, checkpoint_file, device = 'cuda:0')
   prediction = inference_model(model, img_path)
   gt_seg = PixelData(data=gt_labels)
   prediction.gt_sem_seg = gt_seg
+  if not np.any(prediction.pred_sem_seg.data.cpu().numpy()):
+    continue
   # GT is on the left, Prediction on the right.
   # https://github.com/open-mmlab/mmsegmentation/blob/c685fe6767c4cadf6b051983ca6208f1b9d1ccb8/mmseg/visualization/local_visualizer.py#L271
   pred_overlaid_im = show_result_pyplot(model, original_image, prediction,
