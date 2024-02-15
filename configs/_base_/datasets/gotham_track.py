@@ -38,7 +38,7 @@ train_pipeline = [
     dict(type='RandomCrop', crop_size=train_crop_size, cat_max_ratio=0.99),
     dict(type='RandomFlip', prob=0.5),
     # Default seg_pad_val=255 breaks with class_weight due to out-of-bound indexing.
-    dict(type='RandomRotate', prob=1.0, degree=30.0, seg_pad_val=0),
+    # dict(type='RandomRotate', prob=1.0, degree=30.0, seg_pad_val=0),
     dict(type='PhotoMetricDistortion'),
     dict(type='PackSegInputs')
 ]
