@@ -5,7 +5,7 @@ then
   exit
 fi
 
-python tools/test.py configs/swin/20231118_gotham_track.py $1
+python tools/test.py configs/swin/20231212_batch60_adjustlr.py $1
 
 # Command to save visualization.
 #VIS_DIR=/tmp/vis_dir
