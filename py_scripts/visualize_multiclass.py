@@ -14,14 +14,14 @@ mmseg = '/home/ubuntu/mmsegmentation/'
 temp = os.path.join(mmseg, 'temp')
 test_dir = os.path.join(mmseg, 'data/track/images/validation')
 gt_dir = os.path.join(mmseg, 'data/track/annotations/validation')
-config_file = os.path.join(mmseg, 'configs/swin/20231212_batch60_adjustlr.py')
-checkpoint_file = os.path.join(mmseg, 'work_dirs/20231212_batch60_adjustlr/iter_40000.pth')
+config_file = os.path.join(mmseg, 'configs/swin/20240223_4gpu_b60_p256_iter80k.py')
+checkpoint_file = os.path.join(mmseg, 'work_dirs/20240223_4gpu_b60_p256_iter80k/iter_80000.pth')
 pred_palette = [[0, 0, 0], [0, 255, 0], [255, 0, 0,], [0, 0, 255], 
                 [128, 128, 0], [128, 0, 128], [0, 128, 128]]
 gt_palette = [[0, 0, 0], [0, 255, 0], [255, 0, 0], [0, 0, 255],
               [128, 128, 0], [128, 0, 128], [0, 128, 128]]  # BGR for OpenCV.
 test_imgs = sorted([x for x in os.listdir(test_dir) if x.endswith('.png')])
-out_dir = os.path.join(mmseg, 'visualizations/20231212_batch60_adjustlr')
+out_dir = os.path.join(mmseg, 'visualizations/20240223_4gpu_b60_p256_iter80k')
 cls_names = ['Background', 'Contusion', 'Petechial', 'Epidural', 'Subdural',
              'Subarachnoid', 'Intraventricular']
 
@@ -43,15 +43,16 @@ for img in progressbar.progressbar(test_imgs):
   gt = img.replace('_Im', '_Gt')
   gt_path = os.path.join(gt_dir, gt)
   gt_labels = np.array(Image.open(gt_path))
-  if np.any(gt_labels):
+  if not np.any(gt_labels):
+  # if np.any(gt_labels):
     continue
 
   model = init_model(config_file, checkpoint_file, device = 'cuda:0')
   prediction = inference_model(model, img_path)
   gt_seg = PixelData(data=gt_labels)
   prediction.gt_sem_seg = gt_seg
-  if not np.any(prediction.pred_sem_seg.data.cpu().numpy()):
-    continue
+  # if not np.any(prediction.pred_sem_seg.data.cpu().numpy()):
+    # continue
   # GT is on the left, Prediction on the right.
   # https://github.com/open-mmlab/mmsegmentation/blob/c685fe6767c4cadf6b051983ca6208f1b9d1ccb8/mmseg/visualization/local_visualizer.py#L271
   pred_overlaid_im = show_result_pyplot(model, original_image, prediction,
