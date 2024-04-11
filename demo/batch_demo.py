@@ -12,7 +12,7 @@ import torch
 from mmseg.apis import inference_model, init_model, show_result_pyplot
 import numpy as np
 from PIL import Image
-
+import pdb
 
 def parse_args():
     parser = ArgumentParser()
@@ -53,15 +53,21 @@ def main():
   if args.device == 'cpu':
       model = revert_sync_batchnorm(model)
 
+  # Softmax
+  softmax_layer = torch.nn.Softmax(dim=0)
   test_image_paths, gt_labels_paths = get_image_label_paths(args.test_data, cutoff=None)
   for im_path, gt_path in tqdm.tqdm(zip(test_image_paths, gt_labels_paths)):
     np_img = np.array(Image.open(im_path))
     original_image = np.tile(np_img[:, :, 1:2], (1, 1, 3))
     result = inference_model(model, np_img)
+    # Compute softmax
+    softmax_prob = softmax_layer(result.seg_logits.data).cpu().numpy()  # (7, 512, 512)
+    class_index = result.pred_sem_seg.data.cpu().numpy()[0]  # (512, 512)
+    
     # Store GT mask.
-    gt_mask = np.array(Image.open(gt_path))
-    gt_mask = torch.from_numpy(gt_mask)
-    result.gt_sem_seg = PixelData(data=gt_mask)
+    # gt_mask = np.array(Image.open(gt_path))
+    # gt_mask = torch.from_numpy(gt_mask)
+    # result.gt_sem_seg = PixelData(data=gt_mask)
     # show the results
     if not os.path.exists(args.out_dir):
       os.makedirs(args.out_dir)
@@ -71,9 +77,14 @@ def main():
         original_image,
         result,
         opacity=args.opacity,
-        draw_gt=True,
+        draw_gt=False,
         show=False,
         out_file=out_file)
+    # Saving soft probablity.
+    prob_out_file = os.path.join(args.out_dir, im_path.split('/')[-1].replace('.png', '.npy'))
+    cls_out_file = os.path.join(args.out_dir, im_path.split('/')[-1].replace('.png', '.csv'))
+    np.save(prob_out_file, softmax_prob)
+    np.savetxt(cls_out_file, class_index, fmt='%d')
 
 
 if __name__ == '__main__':
