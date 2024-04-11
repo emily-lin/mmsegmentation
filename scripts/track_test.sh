@@ -5,7 +5,7 @@ then
   exit
 fi
 
-python tools/test.py configs/swin/20231212_batch60_adjustlr.py $1
+python tools/test.py configs/swin/20240223_4gpu_b60_p256_iter160k.py $1
 
 # Command to save visualization.
 #VIS_DIR=/tmp/vis_dir
