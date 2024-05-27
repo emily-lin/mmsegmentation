@@ -79,6 +79,7 @@ def main():
         opacity=args.opacity,
         draw_gt=False,
         show=False,
+        withLabels=False,
         out_file=out_file)
     # Saving soft probablity.
     prob_out_file = os.path.join(args.out_dir, im_path.split('/')[-1].replace('.png', '.npy'))

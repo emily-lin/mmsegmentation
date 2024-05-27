@@ -29,9 +29,9 @@ def quick_convert_csv2png(f):
   """
   Check how many CSV are converted to png.
   """
-  data_dir = '/home/ubuntu/data/archive/TRACK_NEJM-AI_human-in-loop_csvfiles'
+  data_dir = '/data/20240524_unlabeled_grant_data/NEW_CSV_FILES_EMILY_FOLLOWUP_CTs'
   fpath = os.path.join(data_dir,f)
-  output_dir = '/home/ubuntu/data/20240408_unlabeled_track/images'
+  output_dir = '/data/20240524_unlabeled_grant_data/images'
   center_frame = np.loadtxt(fpath,delimiter=',',dtype=np.float32) 
   #Check the amount of zeros in the image
   if np.sum(center_frame==0)>SKIP_ZERO_THR * center_frame.size:
@@ -46,7 +46,7 @@ def convert_csv2png(f, data_dir):
   Read in csv data and save as png data
   """
   fpath = os.path.join(data_dir,f)
-  output_dir = '/home/ubuntu/data/20240408_unlabeled_track/images'
+  output_dir = '/data/20240524_unlabeled_grant_data/images'
   print(fpath)
   
   #Check the fake ground truth frame
@@ -115,8 +115,8 @@ def convert_csv2png(f, data_dir):
   return (var_list,var_cnt,f)
 
 def convert_csv2png_main():
-  path_to_csv_dir = '/home/ubuntu/data/archive/TRACK_NEJM-AI_human-in-loop_csvfiles'
-  path_to_image_dir = '/home/ubuntu/data/20240408_unlabeled_track/images'
+  path_to_csv_dir = '/data/20240524_unlabeled_grant_data/NEW_CSVFILES_EMILY_FOLLOWUP_CTs'
+  path_to_image_dir = '/data/20240524_unlabeled_grant_data/images'
   data_dir = os.path.join(path_to_csv_dir)
   output_dir = os.path.join(path_to_image_dir)
   if not os.path.exists(output_dir):

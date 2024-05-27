@@ -1,1 +1,1 @@
-python demo/batch_demo.py --config=configs/swin/20240223_4gpu_b60_p256_iter160k.py --checkpoint=work_dirs/20240223_4gpu_b60_p256_iter160k/iter_160000.pth --out_dir=visualizations/20240410_unlabeled_track_model_predictions --test_data=/home/ubuntu/data/20240408_unlabeled_track
+python demo/batch_demo.py --config=configs/swin/20240223_4gpu_b60_p256_iter160k.py --checkpoint=work_dirs/20240223_4gpu_b60_p256_iter160k/iter_160000.pth --out_dir=visualizations/20240526_grant_visualizations --test_data=/data/20240524_unlabeled_grant_data
